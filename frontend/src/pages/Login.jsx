@@ -17,7 +17,12 @@ export default function Login() {
       await login(form);
       navigate("/");
     } catch (err) {
-      setError(err?.response?.data?.message || "Login failed");
+      const details = err?.response?.data?.errors;
+      if (Array.isArray(details) && details.length) {
+        setError(details.map((item) => item.message).join(", "));
+      } else {
+        setError(err?.response?.data?.message || "Login failed");
+      }
     } finally {
       setLoading(false);
     }
