@@ -1,0 +1,12 @@
+import { logger } from "../utils/logger.js";
+
+export const errorHandler = (err, req, res, next) => {
+  logger.error("Unhandled error", err);
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  return res.status(err.status || 500).json({
+    message: err.message || "Server error"
+  });
+};
