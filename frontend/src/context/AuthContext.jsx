@@ -28,6 +28,10 @@ export function AuthProvider({ children }) {
     setAuthState(next);
   };
 
+  const registerCitizen = async ({ fullName, email, phone, password }) => {
+    await apiClient.post("/auth/register", { fullName, email, phone, password });
+  };
+
   const logout = async () => {
     try {
       if (authState.refreshToken) {
@@ -48,6 +52,7 @@ export function AuthProvider({ children }) {
       ...authState,
       isAuthenticated: Boolean(authState.token),
       login,
+      registerCitizen,
       logout
     }),
     [authState]

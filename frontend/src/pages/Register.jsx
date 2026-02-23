@@ -2,28 +2,36 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
-export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+export default function Register() {
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: ""
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const [success, setSuccess] = useState("");
+  const { registerCitizen, login } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
+
     try {
-      await login(form);
+      await registerCitizen(form);
+      await login({ email: form.email, password: form.password });
+      setSuccess("Registration successful. Redirecting...");
       navigate("/");
     } catch (err) {
       const details = err?.response?.data?.errors;
       if (Array.isArray(details) && details.length) {
         setError(details.map((item) => item.message).join(", "));
-      } else if (err?.response?.status === 401) {
-        setError("Invalid credentials. For admin login run: npm run seed (backend).");
       } else {
-        setError(err?.response?.data?.message || "Login failed");
+        setError(err?.response?.data?.message || "Registration failed");
       }
     } finally {
       setLoading(false);
@@ -36,16 +44,34 @@ export default function Login() {
         onSubmit={onSubmit}
         className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg dark:bg-slate-900"
       >
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Gram Panchayat Login</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">Citizen / Officer / Admin access</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Citizen Registration</h1>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">Create your Gram Panchayat account</p>
 
-        <label className="mt-6 block text-sm font-medium text-slate-700 dark:text-slate-200">Email</label>
+        <label className="mt-6 block text-sm font-medium text-slate-700 dark:text-slate-200">Full name</label>
+        <input
+          required
+          type="text"
+          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:bg-slate-800 dark:text-white"
+          value={form.fullName}
+          onChange={(event) => setForm((prev) => ({ ...prev, fullName: event.target.value }))}
+        />
+
+        <label className="mt-4 block text-sm font-medium text-slate-700 dark:text-slate-200">Email</label>
         <input
           required
           type="email"
           className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:bg-slate-800 dark:text-white"
           value={form.email}
           onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+        />
+
+        <label className="mt-4 block text-sm font-medium text-slate-700 dark:text-slate-200">Mobile number</label>
+        <input
+          required
+          type="text"
+          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:bg-slate-800 dark:text-white"
+          value={form.phone}
+          onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
         />
 
         <label className="mt-4 block text-sm font-medium text-slate-700 dark:text-slate-200">Password</label>
@@ -58,18 +84,19 @@ export default function Login() {
         />
 
         {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+        {success && <p className="mt-4 text-sm text-green-600">{success}</p>}
 
         <button
           disabled={loading}
           className="mt-6 w-full rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-60"
         >
-          {loading ? "Signing in..." : "Sign in"}
+          {loading ? "Creating account..." : "Register"}
         </button>
 
         <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
-          New citizen?{" "}
-          <Link to="/register" className="font-medium text-brand-700 hover:underline">
-            Register here
+          Already have an account?{" "}
+          <Link to="/login" className="font-medium text-brand-700 hover:underline">
+            Sign in
           </Link>
         </p>
       </form>

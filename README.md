@@ -2,13 +2,17 @@
 
 A complete full-stack implementation for Gram Panchayat administration, community clubs, donations, development tracking, and citizen grievances.
 
+## Runtime Compatibility (Debugged)
+- **Node.js:** `v22.19.0` (verified target)
+- **npm:** `10.9.3` (verified target)
+
 ## Tech Stack
 - **Frontend:** React + Vite + Tailwind CSS
 - **Backend:** Node.js + Express + JWT + Joi + RBAC
 - **Database:** MongoDB + Mongoose
 
 ## Features Delivered
-- Citizen registration, staff/admin login, JWT access + refresh token flow
+- Citizen registration + login, staff/admin login, JWT access + refresh token flow
 - Role-based authorization for Admin / Panchayat Officer / Citizen
 - Festival and community club CRUD modules
 - Temple donation module with receipt ID generation and PDF/Excel exports
@@ -16,7 +20,7 @@ A complete full-stack implementation for Gram Panchayat administration, communit
 - Gram Samasya complaint registration and officer workflow support
 - Dashboard analytics endpoint (`/api/dashboard/summary`)
 - Persistent audit logging for security-sensitive actions
-- Frontend login flow, protected routes, dark/light mode, English/Hindi toggle
+- Frontend login + registration flow, protected routes, dark/light mode, English/Hindi toggle
 
 ## Project Structure
 ```
@@ -74,12 +78,33 @@ JWT_REFRESH_SECRET=change_me_refresh
 JWT_ACCESS_EXPIRY=15m
 JWT_REFRESH_EXPIRY=7d
 CLIENT_ORIGIN=http://localhost:5173
+SEED_ADMIN_NAME=System Admin
+SEED_ADMIN_EMAIL=admin@panchayat.local
+SEED_ADMIN_PHONE=9999999999
+SEED_ADMIN_PASSWORD=Admin@12345
 ```
 
 ### `frontend/.env`
 ```env
 VITE_API_URL=http://localhost:4000/api
 ```
+
+## Login/Registration Debug Guide
+If you see `401 Invalid credentials` on `/api/auth/login`:
+1. Ensure MongoDB is running.
+2. Seed admin user:
+   ```bash
+   cd backend
+   npm run seed
+   ```
+3. Login with:
+   - `admin@panchayat.local`
+   - `Admin@12345`
+4. For citizen access, register from `/register` page, then login with same credentials.
+
+If you see `400 Validation error`:
+- check request payload includes `email` + `password`.
+- frontend now shows detailed backend validation messages.
 
 ## Key API Examples
 ```bash
