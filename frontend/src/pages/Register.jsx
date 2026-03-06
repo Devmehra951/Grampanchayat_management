@@ -25,7 +25,7 @@ export default function Register() {
       await registerCitizen(form);
       await login({ email: form.email, password: form.password });
       setSuccess("Registration successful. Redirecting...");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       const details = err?.response?.data?.errors;
       if (Array.isArray(details) && details.length) {

@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { Roles, isAdminOrOfficer } from "../utils/roles.js";
 
 const navigation = [
-  { name: "Dashboard", path: "/", roles: [Roles.ADMIN, Roles.OFFICER, Roles.CITIZEN] },
+  { name: "Dashboard", path: "/dashboard", roles: [Roles.ADMIN, Roles.OFFICER, Roles.CITIZEN] },
   { name: "Clubs", path: "/clubs", roles: [Roles.ADMIN, Roles.OFFICER, Roles.CITIZEN] },
   { name: "Festivals", path: "/festivals", roles: [Roles.ADMIN, Roles.OFFICER, Roles.CITIZEN] },
   { name: "Donations", path: "/donations", roles: [Roles.ADMIN, Roles.OFFICER, Roles.CITIZEN] },
@@ -28,7 +28,7 @@ export default function AppShell({ children }) {
           <div className="text-xl font-semibold text-brand-700">Gram Panchayat</div>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">Community Management</p>
           <p className="mt-2 text-xs text-slate-400">
-            {isAdminOrOfficer(user?.role) ? "Admin Control Center" : "Citizen Portal"}
+            {isAdminOrOfficer(user?.role) ? "Admin/Officer Control Center" : "Citizen Service Portal"}
           </p>
           <nav className="mt-8 space-y-2">
             {menu.map((item) => (

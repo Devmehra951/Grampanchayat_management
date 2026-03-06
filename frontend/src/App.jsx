@@ -12,16 +12,18 @@ import ShellLayout from "./routes/ShellLayout.jsx";
 import RoleRoute from "./routes/RoleRoute.jsx";
 import Clubs from "./pages/Clubs.jsx";
 import { Roles } from "./utils/roles.js";
+import Home from "./pages/Home.jsx";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<ShellLayout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/clubs" element={<Clubs />} />
           <Route path="/festivals" element={<Festivals />} />
           <Route path="/donations" element={<Donations />} />

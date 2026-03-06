@@ -41,3 +41,35 @@ export const deleteFestival = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const volunteerFestival = async (req, res, next) => {
+  try {
+    const festival = await FestivalEvent.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { volunteers: req.user.id } },
+      { new: true }
+    );
+    if (!festival) {
+      return res.status(404).json({ message: "Festival not found" });
+    }
+    return res.json({ message: "Volunteer registered", festival });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const withdrawVolunteerFestival = async (req, res, next) => {
+  try {
+    const festival = await FestivalEvent.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { volunteers: req.user.id } },
+      { new: true }
+    );
+    if (!festival) {
+      return res.status(404).json({ message: "Festival not found" });
+    }
+    return res.json({ message: "Volunteer withdrawn", festival });
+  } catch (error) {
+    return next(error);
+  }
+};

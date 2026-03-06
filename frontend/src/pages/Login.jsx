@@ -15,7 +15,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(form);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       const details = err?.response?.data?.errors;
       if (Array.isArray(details) && details.length) {

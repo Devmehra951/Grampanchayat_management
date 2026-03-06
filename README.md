@@ -3,11 +3,12 @@
 Production-ready full-stack project for Gram Panchayat operations with role-based dashboards and CRUD modules.
 
 ## ✅ Ready-to-use Features
+- Public SaaS Home Page (`/`) with product-style landing and role entry points
 - JWT auth (access + refresh)
 - Role-based behavior after login:
   - **ADMIN**: full control + user/staff management
   - **PANCHAYAT_OFFICER**: operational management (clubs, festivals, development, collections, complaints)
-  - **CITIZEN**: complaint + donation operations and personal tracking
+  - **CITIZEN**: complaint + donation operations, club joining, festival volunteering and personal tracking
 - CRUD-enabled modules:
   - Clubs
   - Festivals
@@ -106,9 +107,12 @@ VITE_API_URL=http://localhost:4000/api
 - Access operational pages
 - CRUD for clubs/festivals/development
 - Manage collections and resolve complaints
+- Track citizen participation KPIs on dashboard
 
 ### Citizen
 - Register/login
+- Join/leave clubs
+- Volunteer/withdraw from festivals
 - File and track own complaints
 - Create and view own donations
 - View public page data

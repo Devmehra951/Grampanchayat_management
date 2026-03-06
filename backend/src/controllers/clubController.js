@@ -41,3 +41,35 @@ export const deleteClub = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const joinClub = async (req, res, next) => {
+  try {
+    const club = await Club.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { members: req.user.id } },
+      { new: true }
+    );
+    if (!club) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+    return res.json({ message: "Joined club", club });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const leaveClub = async (req, res, next) => {
+  try {
+    const club = await Club.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { members: req.user.id } },
+      { new: true }
+    );
+    if (!club) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+    return res.json({ message: "Left club", club });
+  } catch (error) {
+    return next(error);
+  }
+};
