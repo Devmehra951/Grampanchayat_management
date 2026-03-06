@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const rawOrigins = process.env.CLIENT_ORIGIN || "http://localhost:5173,http://127.0.0.1:5173";
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   port: Number(process.env.PORT || 4000),
@@ -10,5 +12,5 @@ export const env = {
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "change_me_refresh",
   jwtAccessExpiry: process.env.JWT_ACCESS_EXPIRY || "15m",
   jwtRefreshExpiry: process.env.JWT_REFRESH_EXPIRY || "7d",
-  clientOrigin: process.env.CLIENT_ORIGIN || "http://localhost:5173"
+  clientOrigins: rawOrigins.split(",").map((origin) => origin.trim()).filter(Boolean)
 };

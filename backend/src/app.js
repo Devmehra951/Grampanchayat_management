@@ -14,16 +14,26 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { env } from "./config/env.js";
 
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || env.clientOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
+  credentials: true
+};
+
 export const createApp = () => {
   const app = express();
 
   app.use(helmet());
-  app.use(cors({ origin: env.clientOrigin, credentials: true }));
+  app.use(cors(corsOptions));
   app.use(express.json({ limit: "2mb" }));
   app.use(morgan("dev"));
   app.use(apiRateLimiter);
 
-  app.get("/health", (req, res) => res.json({ status: "ok" }));
+  app.get("/health", (req, res) => res.json({ status: "ok", origins: env.clientOrigins }));
   app.use("/api/auth", authRoutes);
   app.use("/api/festivals", festivalRoutes);
   app.use("/api/donations", donationRoutes);
