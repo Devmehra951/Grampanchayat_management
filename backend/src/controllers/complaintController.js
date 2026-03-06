@@ -1,4 +1,5 @@
 import { Complaint } from "../models/Complaint.js";
+import { Roles } from "../utils/constants.js";
 
 export const createComplaint = async (req, res, next) => {
   try {
@@ -14,7 +15,8 @@ export const createComplaint = async (req, res, next) => {
 
 export const listComplaints = async (req, res, next) => {
   try {
-    const complaints = await Complaint.find().sort({ createdAt: -1 });
+    const query = req.user.role === Roles.citizen ? { citizen: req.user.id } : {};
+    const complaints = await Complaint.find(query).sort({ createdAt: -1 });
     return res.json(complaints);
   } catch (error) {
     return next(error);

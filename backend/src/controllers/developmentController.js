@@ -29,3 +29,15 @@ export const updateProject = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const deleteProject = async (req, res, next) => {
+  try {
+    const project = await DevelopmentProject.findByIdAndDelete(req.params.id);
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    return res.json({ message: "Project deleted" });
+  } catch (error) {
+    return next(error);
+  }
+};

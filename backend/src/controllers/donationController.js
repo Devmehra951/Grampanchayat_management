@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Donation } from "../models/Donation.js";
 import { buildDonationExcel, buildDonationPdf } from "../services/reportService.js";
+import { Roles } from "../utils/constants.js";
 
 export const createDonation = async (req, res, next) => {
   try {
@@ -8,7 +9,8 @@ export const createDonation = async (req, res, next) => {
     const donation = await Donation.create({
       ...req.body,
       receiptNumber,
-      receivedBy: req.user?.id
+      citizen: req.user.role === Roles.citizen ? req.user.id : req.body.citizen,
+      receivedBy: req.user.role === Roles.citizen ? null : req.user.id
     });
     return res.status(201).json(donation);
   } catch (error) {
@@ -18,7 +20,8 @@ export const createDonation = async (req, res, next) => {
 
 export const listDonations = async (req, res, next) => {
   try {
-    const donations = await Donation.find().sort({ createdAt: -1 });
+    const query = req.user.role === Roles.citizen ? { citizen: req.user.id } : {};
+    const donations = await Donation.find(query).sort({ createdAt: -1 });
     return res.json(donations);
   } catch (error) {
     return next(error);

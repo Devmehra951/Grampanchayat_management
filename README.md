@@ -6,6 +6,12 @@ A complete full-stack implementation for Gram Panchayat administration, communit
 - **Node.js:** `v22.19.0`+
 - **npm:** `10.9.3`+
 
+## Role-wise Login Behavior (Automatic)
+After login, pages and operations are automatically controlled by role:
+- **ADMIN**: full control center + user management + CRUD on clubs/festivals/development/donations + complaint resolution
+- **PANCHAYAT_OFFICER**: CRUD on clubs/festivals/development/donations + complaint resolution
+- **CITIZEN**: register/login, create/view own complaints, create/view own donations, and view public modules
+
 ## Quick Start (Fully Working)
 ### 1) Start backend
 ```bash
@@ -30,19 +36,18 @@ npm run dev
 - **Officer**: `officer@panchayat.local` / `Officer@123`
 - **Citizen**: create from `/register`
 
-## Critical Backend ↔ Frontend Connection Fixes
-- CORS now supports both `http://localhost:5173` and `http://127.0.0.1:5173` (comma-separated origins).
-- Health endpoint returns active allowed origins for quick debugging:
-  - `GET http://localhost:4000/health`
-
-## API-backed Pages (No fake static DB data)
-These screens now read from backend APIs and show **real DB status**:
-- Festivals (`/api/festivals`)
-- Development (`/api/developments`)
-- Donations (`/api/donations`) (Admin/Officer)
-- Complaints (`/api/complaints`) (Admin/Officer)
-
-If MongoDB has zero documents, UI shows "No ... found in database" instead of fake cards.
+## Core Role-wise Modules
+- Dashboard KPIs: **Active Projects, Total Donations, Open Complaints, Upcoming Festivals**
+- Clubs: list for all, create/delete for Admin/Officer
+- Festivals: list for all, create/delete for Admin/Officer
+- Development: list for all logged users, create/delete for Admin/Officer
+- Donations:
+  - Admin/Officer: all donations + exports
+  - Citizen: own donation history + create donation
+- Complaints:
+  - Citizen: create + own complaints
+  - Admin/Officer: view all + mark resolved
+- Users: admin creates new Admin/Officer accounts
 
 ## Environment Variables
 ### `backend/.env`
@@ -66,12 +71,12 @@ SEED_ADMIN_PASSWORD=Admin@12345
 VITE_API_URL=http://localhost:4000/api
 ```
 
-## Debug Checklist (if frontend cannot hit backend)
-1. Backend is running on port 4000 and `/health` responds.
-2. Frontend `.env` uses `VITE_API_URL=http://localhost:4000/api`.
-3. Backend `.env` has `CLIENT_ORIGIN` including your frontend host (`localhost` or `127.0.0.1`).
-4. Login with seeded account (`npm run seed`).
-5. Seed data for page cards (`npm run seed:demo`).
+## Debug Checklist (frontend cannot hit backend)
+1. Backend is running and `GET /health` returns `status: ok`.
+2. Frontend `.env` points to `VITE_API_URL=http://localhost:4000/api`.
+3. `CLIENT_ORIGIN` includes your frontend host (`localhost` + `127.0.0.1`).
+4. Run `npm run seed` then `npm run seed:demo` in backend.
+5. Login with seeded accounts and verify role-wise menus.
 
 ## Tech Stack
 - **Frontend:** React + Vite + Tailwind CSS

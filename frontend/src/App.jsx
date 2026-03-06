@@ -9,6 +9,9 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import ShellLayout from "./routes/ShellLayout.jsx";
+import RoleRoute from "./routes/RoleRoute.jsx";
+import Clubs from "./pages/Clubs.jsx";
+import { Roles } from "./utils/roles.js";
 
 export default function App() {
   return (
@@ -19,11 +22,15 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<ShellLayout />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/clubs" element={<Clubs />} />
           <Route path="/festivals" element={<Festivals />} />
           <Route path="/donations" element={<Donations />} />
           <Route path="/development" element={<Development />} />
           <Route path="/complaints" element={<Complaints />} />
-          <Route path="/users" element={<Users />} />
+
+          <Route element={<RoleRoute allow={[Roles.ADMIN]} />}>
+            <Route path="/users" element={<Users />} />
+          </Route>
         </Route>
       </Route>
 
