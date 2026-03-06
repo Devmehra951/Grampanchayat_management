@@ -1,29 +1,48 @@
 # Gram Panchayat & Community Management Platform
 
-A complete full-stack implementation for Gram Panchayat administration, community clubs, donations, development tracking, and citizen grievances.
+Production-ready full-stack project for Gram Panchayat operations with role-based dashboards and CRUD modules.
 
-## Runtime Compatibility (Debugged)
-- **Node.js:** `v22.19.0`+
-- **npm:** `10.9.3`+
+## ✅ Ready-to-use Features
+- JWT auth (access + refresh)
+- Role-based behavior after login:
+  - **ADMIN**: full control + user/staff management
+  - **PANCHAYAT_OFFICER**: operational management (clubs, festivals, development, collections, complaints)
+  - **CITIZEN**: complaint + donation operations and personal tracking
+- CRUD-enabled modules:
+  - Clubs
+  - Festivals
+  - Development Projects
+  - Donations
+  - Complaints
+  - Users (Admin only)
+- Dashboard cards using live backend data:
+  - Active Projects
+  - Total Donations
+  - Open Complaints
+  - Upcoming Festivals
 
-## Role-wise Login Behavior (Automatic)
-After login, pages and operations are automatically controlled by role:
-- **ADMIN**: full control center + user management + CRUD on clubs/festivals/development/donations + complaint resolution
-- **PANCHAYAT_OFFICER**: CRUD on clubs/festivals/development/donations + complaint resolution
-- **CITIZEN**: register/login, create/view own complaints, create/view own donations, and view public modules
+---
 
-## Quick Start (Fully Working)
-### 1) Start backend
+## Runtime Compatibility
+- Node.js: **v22.19.0+**
+- npm: **10.9.3+**
+- MongoDB: **6.x+** or **7.x+**
+
+---
+
+## Quick Start (Local)
+
+### 1) Backend
 ```bash
 cd backend
 cp .env.example .env
 npm install
-npm run seed        # creates admin@panchayat.local
-npm run seed:demo   # creates officer + sample records for pages
+npm run seed:roles
+npm run seed:demo
 npm run dev
 ```
 
-### 2) Start frontend
+### 2) Frontend
 ```bash
 cd frontend
 cp .env.example .env
@@ -31,25 +50,27 @@ npm install
 npm run dev
 ```
 
-### 3) Login accounts
-- **Admin**: `admin@panchayat.local` / `Admin@12345`
-- **Officer**: `officer@panchayat.local` / `Officer@123`
-- **Citizen**: create from `/register`
+### 3) Login Accounts (pre-seeded)
+- Admin: `admin@panchayat.local` / `Admin@12345`
+- Officer: `officer@panchayat.local` / `Officer@123`
+- Citizen: `citizen@panchayat.local` / `Citizen@123`
 
-## Core Role-wise Modules
-- Dashboard KPIs: **Active Projects, Total Donations, Open Complaints, Upcoming Festivals**
-- Clubs: list for all, create/delete for Admin/Officer
-- Festivals: list for all, create/delete for Admin/Officer
-- Development: list for all logged users, create/delete for Admin/Officer
-- Donations:
-  - Admin/Officer: all donations + exports
-  - Citizen: own donation history + create donation
-- Complaints:
-  - Citizen: create + own complaints
-  - Admin/Officer: view all + mark resolved
-- Users: admin creates new Admin/Officer accounts
+---
 
-## Environment Variables
+## Workspace-level Commands (optional)
+From repository root:
+```bash
+npm run dev:backend
+npm run dev:frontend
+npm run seed:roles
+npm run seed:demo
+npm run build:frontend
+```
+
+---
+
+## Environment Configuration
+
 ### `backend/.env`
 ```env
 NODE_ENV=development
@@ -71,14 +92,56 @@ SEED_ADMIN_PASSWORD=Admin@12345
 VITE_API_URL=http://localhost:4000/api
 ```
 
-## Debug Checklist (frontend cannot hit backend)
-1. Backend is running and `GET /health` returns `status: ok`.
-2. Frontend `.env` points to `VITE_API_URL=http://localhost:4000/api`.
-3. `CLIENT_ORIGIN` includes your frontend host (`localhost` + `127.0.0.1`).
-4. Run `npm run seed` then `npm run seed:demo` in backend.
-5. Login with seeded accounts and verify role-wise menus.
+---
 
-## Tech Stack
-- **Frontend:** React + Vite + Tailwind CSS
-- **Backend:** Node.js + Express + JWT + Joi + RBAC
-- **Database:** MongoDB + Mongoose
+## Role-wise Functional Behavior
+
+### Admin
+- Access all pages
+- Create Admin/Officer users
+- Full CRUD for clubs/festivals/development
+- View and manage all donations/complaints
+
+### Panchayat Officer
+- Access operational pages
+- CRUD for clubs/festivals/development
+- Manage collections and resolve complaints
+
+### Citizen
+- Register/login
+- File and track own complaints
+- Create and view own donations
+- View public page data
+
+---
+
+## API Health Check
+```bash
+curl http://localhost:4000/health
+```
+
+---
+
+## Project Structure
+```text
+backend/
+  src/
+    config/
+    controllers/
+    middlewares/
+    models/
+    routes/
+    scripts/
+    services/
+    utils/
+    validators/
+frontend/
+  src/
+    components/
+    context/
+    layouts/
+    pages/
+    routes/
+    styles/
+    utils/
+```
